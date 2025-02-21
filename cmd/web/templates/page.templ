@@ -1,0 +1,24 @@
+package templates
+
+templ base() {
+	<html>
+		<head>
+			<title>{ title(ctx) }</title>
+			<link rel="stylesheet" href="/assets/global.css"/>
+			<script src="/assets/index.js"></script>
+		</head>
+		<body>
+			{ children... }
+		</body>
+	</html>
+}
+
+templ header() {
+	<header></header>
+}
+
+templ Home() {
+	@base() {
+		<h1>Test</h1>
+	}
+}

@@ -1,0 +1,13 @@
+{
+  "name": "web",
+  "module": "index.ts",
+  "type": "module",
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "@picocss/pico": "^2.0.6",
+    "alpinejs": "^3.14.8",
+    "htmx.org": "2.0.4"
+  }
+}

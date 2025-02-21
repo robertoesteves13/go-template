@@ -1,0 +1,27 @@
+package templates
+
+import "github.com/robertoesteves13/go-template"
+
+templ PostsFeed(posts []go_template.Post) {
+	@base() {
+		<ul>
+			for i := range posts {
+				<li><a href={ templ.URL(posts[i].URL()) }>{ posts[i].Title() }</a>: {posts[i].Subtitle()}</li>
+			}
+		</ul>
+		<a href="/posts/create">Create Post</a>
+	}
+}
+
+templ Post(post *go_template.Post) {
+	@base() {
+		<article>
+			<h1>{ post.Title() }</h1>
+			<small>{ post.Subtitle() }</small>
+			<small>{ post.CreatedAt().Format("01/02/2006") } - { post.UpdatedAt().Format("01/02/2006") }</small>
+			<article>
+				{ post.Content() }
+			</article>
+		</article>
+	}
+}
