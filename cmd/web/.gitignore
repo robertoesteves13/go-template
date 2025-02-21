@@ -172,4 +172,5 @@ dist
 .idea
 
 # Bundle output
-index.js.gz
+index.js
+global.css

@@ -4,7 +4,7 @@ SASS_FLAGS := --load-path=node_modules/@picocss/pico/scss/ --no-source-map --sty
 BUN_FLAGS := --minify
 
 server: sql templ bundle
-	go build -o web ./cmd/web
+	go build -o wserver ./cmd/web
 sql:
 	sqlc generate
 templ:
