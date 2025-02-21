@@ -6,21 +6,39 @@ start your projects, write less boilerplate code and be more productive overall.
 
 ## Setup
 
-Install all the necessary tools in bold using either the go toolchain or the
-package manager of your choice.
+Do these steps to get it working on your side.
 
 ### Tools
 
-- **Makefile**: building the application;
-- **Docker/Podman**: scaffolding the whole service;
+#### Go toolchain
+
+- **[templ](https://templ.guide/)**: HTML template engine that's type-safe;
+- **[sqlc](https://sqlc.dev/)**: Generate data mapping by only writing SQL queries.
+
+You can run the commands below to download the tools:
+```shell
+go install github.com/a-h/templ/cmd/templ@latest
+go install github.com/sqlc-dev/sqlc/cmd/sqlc@latest
+```
+#### Sytem's package manager
+
+- [Makefile](https://makefiletutorial.com/): building the application;
+- Docker/Podman: scaffolding the whole service;
 - Postgres: Database proven to be reliable;
-- **templ**: HTML template engine that's type-safe;
-- **bun**: Very fast bundler and package manager for javascript;
-- **sass**: Tool to write and build reliable CSS;
-- picocss: CSS framework that provides sane defaults;
-- htmx: Javascript library to make HTML APIs interactive;
-- Alpine.js: Javascript framework for the client side;
-- **sqlc**: Generate data mapping by only writing SQL queries.
+- [bun](https://bun.sh/): Very fast bundler and package manager for javascript;
+- [sass](https://sass-lang.com/): Tool to write and build reliable CSS;
+- [picocss](https://picocss.com/): CSS framework that provides sane defaults;
+- [htmx](https://htmx.org/): Javascript library to make HTML APIs interactive;
+- [Alpine.js](https://alpinejs.dev/): Javascript framework for the client side.
+
+#### Go libraries
+
+The only one worth to look at their documentation is [chi](https://go-chi.io/#/README). The rest can be
+looked on pkg.go.dev and encouraged to be replaced if it doesn't serve your
+needs.
+
+Keep in mind that some of them might be needed for some parts to work, so always
+tests if the project still compiles when you decide to remove one.
 
 ### Steps
 
