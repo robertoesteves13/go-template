@@ -14,6 +14,8 @@ import (
 	"github.com/robertoesteves13/go-template/internal/database"
 )
 
+// All your routes should be written here. You could also transform this file
+// into a folder if you feel this got large enough.
 func RegisterRoutes(r chi.Router) {
 	r.Get("/", postsFeed)
 	r.Get("/post/{id}", postPage)

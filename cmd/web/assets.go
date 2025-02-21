@@ -1,9 +1,5 @@
 package main
 
-// TODO(robson): Complete the list
-// - Support brotli compression
-// - Maybe a better cache system
-
 import (
 	"bytes"
 	"compress/gzip"
@@ -31,6 +27,7 @@ type encoderWeight struct {
 	weight float32
 }
 
+// Structure that handles serving all assets, treating caching and compression.
 type AssetHandler struct {
 	start     time.Time
 	fs        fs.FS
@@ -38,6 +35,8 @@ type AssetHandler struct {
 	zstdFiles map[string]bytes.Buffer
 }
 
+// Creates and compresses the files from the filesystem specified.
+// If fs is nil, the embed one is used instead.
 func NewAssetHandler(fs interface {
 	fs.ReadDirFS
 	fs.ReadFileFS
@@ -165,6 +164,10 @@ func (ah *AssetHandler) getWeightedEncoders(encodings []string) []encoderWeight 
 
 	return encs
 }
+
+// Function that handles HTTP requests.
+// **You are required to have an URL parameter of `filename`, else the function
+// will return `404 file not found`!**
 func (ah *AssetHandler) HandleFunc(w http.ResponseWriter, r *http.Request) {
 	filename := chi.URLParam(r, "filename")
 	if f, err := ah.fs.Open(filename); err != nil {

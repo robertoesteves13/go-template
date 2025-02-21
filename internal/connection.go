@@ -12,6 +12,7 @@ var (
 	conn *pgxpool.Pool
 )
 
+// Initializes the database connection pool
 func ConnectDatabase() error {
 	var err error
 	db_url := os.Getenv("DATABASE_URL")
@@ -27,10 +28,12 @@ func ConnectDatabase() error {
 	return nil
 }
 
+// Get a connection from the pool
 func GetConnection(ctx context.Context) (*pgxpool.Conn, error) {
 	return conn.Acquire(ctx)
 }
 
+// Closes the pool. All connections will be closed aswell.
 func CloseConn() {
 	conn.Close()
 }
