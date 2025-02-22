@@ -14,5 +14,23 @@ templ base() {
 }
 
 templ header() {
-	<header></header>
+	<header flex="col" p="2" bg="blue">
+    <a>Home</a>
+    <a>Home</a>
+    <a>Home</a>
+  </header>
+}
+
+templ footer() {
+	<footer></footer>
+}
+
+templ page() {
+	@base() {
+		@header()
+		<main p="x2">
+			{ children... }
+		</main>
+		@footer()
+	}
 }

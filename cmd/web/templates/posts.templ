@@ -3,7 +3,7 @@ package templates
 import "github.com/robertoesteves13/go-template"
 
 templ PostsFeed(posts []go_template.Post) {
-	@base() {
+	@page() {
 		<ul class="flex">
 			for i := range posts {
 				<li><a href={ templ.URL(posts[i].URL()) }>{ posts[i].Title() }</a>: {posts[i].Subtitle()}</li>
@@ -14,7 +14,7 @@ templ PostsFeed(posts []go_template.Post) {
 }
 
 templ Post(post *go_template.Post) {
-	@base() {
+	@page() {
 		<article>
 			<h1>{ post.Title() }</h1>
 			<small>{ post.Subtitle() }</small>
