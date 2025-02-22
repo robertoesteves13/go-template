@@ -6,8 +6,12 @@
     "typescript": "^5.0.0"
   },
   "dependencies": {
-    "@picocss/pico": "^2.0.6",
     "alpinejs": "^3.14.8",
     "htmx.org": "2.0.4"
+  },
+  "devDependencies": {
+    "@unocss/reset": "^66.0.0",
+    "uglifycss": "^0.0.29",
+    "unocss": "^66.0.0"
   }
 }

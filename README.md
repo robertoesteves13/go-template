@@ -27,7 +27,7 @@ go install github.com/sqlc-dev/sqlc/cmd/sqlc@latest
 - Postgres: Database proven to be reliable;
 - [bun](https://bun.sh/): Very fast bundler and package manager for javascript;
 - [sass](https://sass-lang.com/): Tool to write and build reliable CSS;
-- [picocss](https://picocss.com/): CSS framework that provides sane defaults;
+- [UnoCSS](https://unocss.dev/): CSS utility framework similar to Tailwind;
 - [htmx](https://htmx.org/): Javascript library to make HTML APIs interactive;
 - [Alpine.js](https://alpinejs.dev/): Javascript framework for the client side.
 

@@ -4,12 +4,12 @@ import "github.com/robertoesteves13/go-template"
 
 templ PostsFeed(posts []go_template.Post) {
 	@base() {
-		<ul>
+		<ul class="flex">
 			for i := range posts {
 				<li><a href={ templ.URL(posts[i].URL()) }>{ posts[i].Title() }</a>: {posts[i].Subtitle()}</li>
 			}
 		</ul>
-		<a href="/posts/create">Create Post</a>
+		<a class="b-rounded bg-blue" href="/posts/create">Create Post</a>
 	}
 }
 

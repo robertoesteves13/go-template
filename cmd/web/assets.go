@@ -94,9 +94,9 @@ func (ah *AssetHandler) writeResponse(weighted []encoderWeight, filename string,
 	w.Header().Set("Content-Type", mimetype)
 
 	switch mimetype {
-	case "text/javascript; charset=utf-8":
-		fallthrough
 	case "text/css; charset=utf-8":
+		fallthrough
+	case "text/javascript; charset=utf-8":
 		enc_best := weighted[len(weighted)-1].name
 		switch enc_best {
 		case "gzip":
