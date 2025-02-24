@@ -61,7 +61,6 @@ looking at the code. If you feel it's overwhelming, please open an issue.
 
 ## Very professional todo list
 
-- Decide authentication library;
 - Expand the blog example more to be a full CRUD;
 - Automate database table creation (aka. remove step 5);
 - Implement live reload mechanism (very hard);
