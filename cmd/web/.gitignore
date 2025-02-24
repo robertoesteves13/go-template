@@ -170,7 +170,3 @@ dist
 
 # IntelliJ based IDEs
 .idea
-
-# Bundle output
-index.js
-global.css

@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"io"
+	"log"
 	"net/http"
 
 	"github.com/go-chi/chi/v5"
@@ -20,13 +21,16 @@ func RegisterRoutes(r chi.Router) {
 	r.Get("/", postsFeed)
 	r.Get("/post/{id}", postPage)
 	r.Get("/posts/create", postCreate)
+
+	r.Get("/login", loginPage)
+	r.Get("/register", registerPage)
+	r.Post("/register", registerUser)
 }
 
 func postCreate(w http.ResponseWriter, r *http.Request) {
 	conn, err := internal.GetConnection(r.Context())
 	if err != nil {
-		io.WriteString(w, "internal server error")
-		w.WriteHeader(500)
+		http.Error(w, "500 internal server error", http.StatusInternalServerError)
 		return
 	}
 	defer conn.Release()
@@ -34,8 +38,7 @@ func postCreate(w http.ResponseWriter, r *http.Request) {
 	post := go_template.NewPost()
 	err = post.InsertDB(r.Context(), conn)
 	if err != nil {
-		io.WriteString(w, "internal server error")
-		w.WriteHeader(500)
+		http.Error(w, "500 internal server error", http.StatusInternalServerError)
 		return
 	}
 
@@ -45,8 +48,7 @@ func postCreate(w http.ResponseWriter, r *http.Request) {
 func postsFeed(w http.ResponseWriter, r *http.Request) {
 	conn, err := internal.GetConnection(r.Context())
 	if err != nil {
-		io.WriteString(w, "internal server error")
-		w.WriteHeader(500)
+		http.Error(w, "500 internal server error", http.StatusInternalServerError)
 		return
 	}
 	defer conn.Release()
@@ -54,8 +56,7 @@ func postsFeed(w http.ResponseWriter, r *http.Request) {
 	db := database.New(conn)
 	db_posts, err := db.ListPosts(r.Context())
 	if err != nil {
-		io.WriteString(w, "internal server error")
-		w.WriteHeader(500)
+		http.Error(w, "500 internal server error", http.StatusInternalServerError)
 		return
 	}
 
@@ -77,8 +78,7 @@ func postPage(w http.ResponseWriter, r *http.Request) {
 
 	conn, err := internal.GetConnection(r.Context())
 	if err != nil {
-		io.WriteString(w, "internal server error")
-		w.WriteHeader(500)
+		http.Error(w, "500 internal server error", http.StatusInternalServerError)
 		return
 	}
 	defer conn.Release()
@@ -86,8 +86,7 @@ func postPage(w http.ResponseWriter, r *http.Request) {
 	db := database.New(conn)
 	db_post, err := db.GetPost(r.Context(), pgtype.UUID{Bytes: id, Valid: true})
 	if err != nil {
-		io.WriteString(w, "internal server error")
-		w.WriteHeader(500)
+		http.Error(w, "500 internal server error", http.StatusInternalServerError)
 		return
 	}
 
@@ -97,4 +96,50 @@ func postPage(w http.ResponseWriter, r *http.Request) {
 	ctx = context.WithValue(ctx, templates.TemplateDescription, post.Subtitle())
 
 	templates.Post(post).Render(ctx, w)
+}
+
+func registerPage(w http.ResponseWriter, r *http.Request) {
+	templates.RegisterPage().Render(r.Context(), w)
+}
+
+func registerUser(w http.ResponseWriter, r *http.Request) {
+	err := r.ParseForm()
+	if err != nil {
+		http.Error(w, "invalid", http.StatusBadRequest)
+		return
+	}
+
+	username := r.FormValue("username")
+	email := r.FormValue("email")
+	password := r.FormValue("password")
+
+	log.Printf("%s %s %s", username, email, password)
+
+	user, err := go_template.NewUser(username, email, password)
+	if err != nil {
+		log.Printf("%v", err)
+		http.Error(w, "500 internal server error", http.StatusInternalServerError)
+		return
+	}
+
+	conn, err := internal.GetConnection(r.Context())
+	if err != nil {
+		log.Printf("%v", err)
+		http.Error(w, "500 internal server error", http.StatusInternalServerError)
+		return
+	}
+	defer conn.Release()
+
+	err = user.InsertDB(r.Context(), conn)
+	if err != nil {
+		log.Printf("%v", err)
+		http.Error(w, "500 internal server error", http.StatusInternalServerError)
+		return
+	}
+
+	http.Redirect(w, r, "/login", http.StatusTemporaryRedirect)
+}
+
+func loginPage(w http.ResponseWriter, r *http.Request) {
+	templates.LoginPage().Render(r.Context(), w)
 }

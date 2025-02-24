@@ -5,11 +5,9 @@
   "peerDependencies": {
     "typescript": "^5.0.0"
   },
-  "dependencies": {
-    "alpinejs": "^3.14.8",
-    "htmx.org": "2.0.4"
-  },
   "devDependencies": {
+    "alpinejs": "^3.14.8",
+    "htmx.org": "2.0.4",
     "@unocss/reset": "^66.0.0",
     "uglifycss": "^0.0.29",
     "unocss": "^66.0.0"

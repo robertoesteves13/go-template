@@ -1,0 +1,22 @@
+package templates
+
+templ LoginPage() {
+	@page() {
+		<form method="post" action="/login" bg="gray-200" flex="~ col" m="auto" gap="2" w="52" p="4" border="rounded">
+			@input("email", "email", "Email")
+			@input("password", "password", "Passsword")
+			<button>Login</button>
+		</form>
+	}
+}
+
+templ RegisterPage() {
+	@page() {
+		<form method="post" action="/register" bg="gray-200" flex="~ col" m="auto" gap="2" w="52" p="4" border="rounded">
+			@input("text", "username", "Username")
+			@input("email", "email", "Email")
+			@input("password", "password", "Passsword")
+			<button bg="white">Register</button>
+		</form>
+	}
+}

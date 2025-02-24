@@ -1,5 +1,10 @@
 package templates
 
+import (
+	model "github.com/robertoesteves13/go-template"
+	"github.com/robertoesteves13/go-template/cmd/web/services"
+)
+
 templ base() {
 	<html>
 		<head>
@@ -14,11 +19,21 @@ templ base() {
 }
 
 templ header() {
-	<header flex="col" p="2" bg="blue">
-    <a>Home</a>
-    <a>Home</a>
-    <a>Home</a>
-  </header>
+	{{ info := services.GetUserSession[model.User](ctx) }}
+	<header flex="~ justify-between" p="2" bg="blue">
+		<div flex="~" gap="1">
+			<a>Home</a>
+			<a>Posts</a>
+		</div>
+		<div flex="~" gap="1">
+			if info != nil {
+				<a href="/user">{ info.User().Name() }</a>
+			} else {
+				<a href="/login">Login</a>
+				<a href="/register">Register</a>
+			}
+		</div>
+	</header>
 }
 
 templ footer() {
@@ -28,7 +43,7 @@ templ footer() {
 templ page() {
 	@base() {
 		@header()
-		<main p="x2">
+		<main p="2">
 			{ children... }
 		</main>
 		@footer()
