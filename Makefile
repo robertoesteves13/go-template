@@ -21,6 +21,7 @@ bundle:
 	@echo "UNO: Bundle CSS"
 	@cd cmd/web; bun x unocss -c uno.config.ts
 	@cd cmd/web; bun x uglifycss global.css --output services/global.css
+	@cd cmd/web; rm global.css
 
 clean:
 	rm -f cmd/web/services/global.css
