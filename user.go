@@ -12,9 +12,9 @@ import (
 )
 
 type User struct {
-	id       ulid.ULID
-	name     string
-	email    string
+	Id       ulid.ULID
+	Name     string
+	Email    string
 	password []byte
 }
 
@@ -25,19 +25,11 @@ func NewUser(name string, email string, password string) (*User, error) {
 	}
 
 	return &User{
-		id:       ulid.Make(),
-		name:     name,
-		email:    email,
+		Id:       ulid.Make(),
+		Name:     name,
+		Email:    email,
 		password: hashed,
 	}, nil
-}
-
-func (u *User) Name() string {
-	return u.name
-}
-
-func (u *User) Email() string {
-	return u.email
 }
 
 func (u *User) ValidatePassword(password string) bool {
@@ -53,9 +45,9 @@ func UserFromDB(ctx context.Context, conn *pgxpool.Conn, email string) (*User, e
 	}
 
 	user := &User{
-		id:       dbusr.ID.Bytes,
-		name:     dbusr.Name.String,
-		email:    dbusr.Email.String,
+		Id:       dbusr.ID.Bytes,
+		Name:     dbusr.Name.String,
+		Email:    dbusr.Email.String,
 		password: dbusr.Password,
 	}
 
@@ -66,9 +58,9 @@ func (u *User) InsertDB(ctx context.Context, conn *pgxpool.Conn) error {
 	db := database.New(conn)
 
 	return db.InsertUser(ctx, database.InsertUserParams{
-		ID:        pgtype.UUID{Bytes: u.id, Valid: true},
-		Name:     pgtype.Text{String: u.name, Valid: true},
-		Email:  pgtype.Text{String: u.email, Valid: true},
+		ID:        pgtype.UUID{Bytes: u.Id, Valid: true},
+		Name:     pgtype.Text{String: u.Name, Valid: true},
+		Email:  pgtype.Text{String: u.Email, Valid: true},
 		Password:   u.password,
 	})
 }

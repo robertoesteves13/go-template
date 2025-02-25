@@ -11,6 +11,7 @@ services:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     volumes:
+      - postgres-dev-data:/var/lib/postgresql/data
       - ./schema.sql:/docker-entrypoint-initdb.d/50-schema.sql
     ports:
       - 5432:5432
@@ -51,9 +52,11 @@ services:
       context: .
       dockerfile: Dockerfile.dev
     environment:
+      MEMCACHE_URL: "memcached:11211"
       DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db-dev/${POSTGRES_DB}
     ports:
       - 3000:3000
+      - 3030:3030
     volumes:
       - ./:/app
     profiles:
@@ -64,6 +67,7 @@ services:
       context: .
       dockerfile: Dockerfile.prod
     environment:
+      MEMCACHE_URL: "memcached:11211"
       DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db-prod/${POSTGRES_DB}
     ports:
       - 3000:80
@@ -74,3 +78,4 @@ services:
 
 volumes:
   postgres-prod-data:
+  postgres-dev-data:

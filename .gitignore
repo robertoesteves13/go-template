@@ -1,2 +1,5 @@
 wserver
 .env
+tmp/
+postgres-prod-data
+postgres-dev-data

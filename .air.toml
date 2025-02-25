@@ -6,8 +6,7 @@ tmp_dir = "tmp"
   args_bin = []
   bin = "./wserver"
   cmd = "make server"
-  delay = 0
-  exclude_dir = ["cmd/web/node_modules", "internal/database"]
+  exclude_dir = ["cmd/web/node_modules", "internal/database", "tmp"]
   exclude_file = []
   exclude_regex = ["_test.go", "_templ.go"]
   exclude_unchanged = false
@@ -16,14 +15,10 @@ tmp_dir = "tmp"
   include_dir = []
   include_ext = ["go", "templ", "ts"]
   include_file = []
-  kill_delay = "0s"
   log = "build-errors.log"
-  poll = false
-  poll_interval = 0
-  rerun = false
-  rerun_delay = 500
   send_interrupt = false
   stop_on_error = false
+  delay = 10
 
 [color]
   app = ""
@@ -42,3 +37,8 @@ tmp_dir = "tmp"
 [screen]
   clear_on_rebuild = false
   keep_scroll = true
+
+[proxy]
+  enabled = true
+  proxy_port = 3030
+  app_port = 3000

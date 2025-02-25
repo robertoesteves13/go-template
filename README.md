@@ -80,9 +80,7 @@ looking at the code. If you feel it's overwhelming, please open an issue.
 ## Very professional todo list
 
 - Expand the blog example more to be a full CRUD;
-- Use memcached for session storage;
-- Implement live reload mechanism (needs to persist sessions ATM);
-- Maybe improve the cache system;
+- Maybe improve the asset manager cache system;
 - Support more compression algorithms (brotli, deflate);
 - TOTP/email verification;
 - Write tests for some of the modules.

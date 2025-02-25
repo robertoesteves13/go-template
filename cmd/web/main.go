@@ -16,13 +16,17 @@ import (
 func main() {
 	r := chi.NewRouter()
 
-	asset_handler, err := services.NewAssetHandler(nil)
-	session_manager := services.NewSessionManager[model.User]()
+	session_manager, err := services.NewSessionManager[model.User](os.Getenv("MEMCACHE_URL"))
+	if err != nil {
+		fmt.Printf("Failed to initialize session manager: %v", err)
+		os.Exit(1)
+	}
 
+	asset_handler, err := services.NewAssetHandler(nil)
 	r.Use(middleware.Logger, session_manager.Authenticate)
 
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Failed to initialize asset handler: %v", err)
+		fmt.Printf("Failed to initialize asset handler: %v", err)
 		os.Exit(1)
 	}
 	r.Get("/assets/{filename}", asset_handler.HandleFunc)
@@ -47,7 +51,7 @@ func main() {
 		}
 		is_same_password := user.ValidatePassword(pw)
 
-		if email == user.Email() && is_same_password {
+		if email == user.Email && is_same_password {
 			return user, nil
 		} else {
 			return nil, fmt.Errorf("invalid credentials")
@@ -57,14 +61,14 @@ func main() {
 
 	err = internal.ConnectDatabase()
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Failed to connect to database: %v", err)
+		fmt.Printf("Failed to connect to database: %v", err)
 		os.Exit(1)
 	}
 	defer internal.CloseConn()
 
 	err = http.ListenAndServe(":3000", r)
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Failed to start server: %v", err)
+		fmt.Printf("Failed to start server: %v", err)
 		os.Exit(1)
 	}
 }

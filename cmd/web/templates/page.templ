@@ -23,11 +23,10 @@ templ header() {
 	<header flex="~ justify-between" p="2" bg="blue">
 		<div flex="~" gap="1">
 			<a>Home</a>
-			<a>Posts</a>
 		</div>
 		<div flex="~" gap="1">
 			if info != nil {
-				<a href="/user">{ info.User().Name() }</a>
+				<a href="/user">{ info.User.Name }</a>
 			} else {
 				<a href="/login">Login</a>
 				<a href="/register">Register</a>
