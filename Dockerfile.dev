@@ -1,0 +1,16 @@
+FROM golang:1.24-bookworm
+
+WORKDIR /app
+
+RUN apt-get update && apt-get install -y bash git curl make ca-certificates unzip tzdata
+RUN go install github.com/a-h/templ/cmd/templ@latest
+RUN go install github.com/sqlc-dev/sqlc/cmd/sqlc@latest
+RUN go install github.com/air-verse/air@latest
+RUN curl -fsSL https://bun.sh/install | bash && \
+    ln -s $HOME/.bun/bin/bun /usr/local/bin/bun
+
+COPY go.mod go.sum ./
+RUN go mod download
+RUN echo 'export PATH="$HOME/.bun/bin:$PATH"' > ~/.bashrc
+
+CMD ["air", "-c", ".air.toml"]

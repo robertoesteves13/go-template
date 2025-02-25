@@ -6,7 +6,9 @@ start your projects, write less boilerplate code and be more productive overall.
 
 ## Setup
 
-Do these steps to get it working on your side.
+Do these steps to get it working on your machine. Alternatively, there's a
+`compose.yml` that has profiles for both development and production environments,
+so you only really need to have docker or podman installed.
 
 ### Tools
 
@@ -42,12 +44,28 @@ tests if the project still compiles when you decide to remove one.
 
 ### Steps
 
+Run one of the commands to
+
+
+#### Using docker/podman compose:
+```shell
+# Don't forget to edit .env when running in production
+cp env.example .env
+
+# Development with hot reload
+$ docker compose --profile dev up
+
+# Production
+$ docker compose --profile prod up
+```
+
+#### Locally on your machine:
+
 1. Clone the repository;
 2. Rename the root package and all the module references (automation TBD);
 3. Run `make server`;
-3. Copy `env.example` as `.env`;
-4. Start the compose service using either docker or podman;
-5. Run `schema.sql` to initialize the database;
+4. Copy `env.example` as `.env`;
+5. Install and initialize postgres database with the tables in `schema.sql`;
 6. Export the database connection URL to the env (on linux you can run `export
 $(cat .env | xargs)`);
 7. Run the `wserver` executable to start the server.
@@ -62,9 +80,9 @@ looking at the code. If you feel it's overwhelming, please open an issue.
 ## Very professional todo list
 
 - Expand the blog example more to be a full CRUD;
-- Automate database table creation (aka. remove step 5);
-- Implement live reload mechanism (very hard);
-- Write a Dockerfile to be fully containerized;
+- Use memcached for session storage;
+- Implement live reload mechanism (needs to persist sessions ATM);
 - Maybe improve the cache system;
 - Support more compression algorithms (brotli, deflate);
+- TOTP/email verification;
 - Write tests for some of the modules.

@@ -2,7 +2,7 @@
 version: '3.9'
 
 services:
-  db:
+  db-dev:
     image: postgres
     restart: always
     shm_size: 128mb
@@ -10,5 +10,67 @@ services:
       POSTGRES_DB: ${POSTGRES_DB}
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - ./schema.sql:/docker-entrypoint-initdb.d/50-schema.sql
     ports:
       - 5432:5432
+    profiles:
+      - dev
+
+  db-prod:
+    image: postgres
+    restart: always
+    shm_size: 128mb
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    deploy:
+      resources:
+        limits:
+          cpus: '2'
+          memory: 2G
+    volumes:
+      - postgres-prod-data:/var/lib/postgresql/data
+      - ./schema.sql:/docker-entrypoint-initdb.d/50-schema.sql
+    profiles:
+      - prod
+
+  memcached:
+    image: memcached
+    command:
+      - --conn-limit=1024
+      - --memory-limit=64
+      - --threads=4
+    profiles:
+      - dev
+      - prod
+
+  wserver-dev:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    environment:
+      DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db-dev/${POSTGRES_DB}
+    ports:
+      - 3000:3000
+    volumes:
+      - ./:/app
+    profiles:
+      - dev
+
+  wserver-prod:
+    build:
+      context: .
+      dockerfile: Dockerfile.prod
+    environment:
+      DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db-prod/${POSTGRES_DB}
+    ports:
+      - 3000:80
+    volumes:
+      - ./:/app
+    profiles:
+      - prod
+
+volumes:
+  postgres-prod-data:

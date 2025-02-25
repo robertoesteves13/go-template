@@ -19,8 +19,8 @@ bundle:
 	@cd cmd/web; bun install
 	@cd cmd/web; bun build ./index.ts --outfile services/index.js $(BUN_FLAGS)
 	@echo "UNO: Bundle CSS"
-	@cd cmd/web; bunx unocss -c uno.config.ts
-	@cd cmd/web; bunx uglifycss global.css --output services/global.css
+	@cd cmd/web; bun x unocss -c uno.config.ts
+	@cd cmd/web; bun x uglifycss global.css --output services/global.css
 
 clean:
 	rm -f cmd/web/services/global.css

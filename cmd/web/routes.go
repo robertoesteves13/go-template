@@ -19,6 +19,7 @@ import (
 // into a folder if you feel this got large enough.
 func RegisterRoutes(r chi.Router) {
 	r.Get("/", postsFeed)
+	r.Post("/", postsFeed)
 	r.Get("/post/{id}", postPage)
 	r.Get("/posts/create", postCreate)
 
@@ -30,6 +31,7 @@ func RegisterRoutes(r chi.Router) {
 func postCreate(w http.ResponseWriter, r *http.Request) {
 	conn, err := internal.GetConnection(r.Context())
 	if err != nil {
+		log.Printf("%v", err)
 		http.Error(w, "500 internal server error", http.StatusInternalServerError)
 		return
 	}
@@ -38,6 +40,7 @@ func postCreate(w http.ResponseWriter, r *http.Request) {
 	post := go_template.NewPost()
 	err = post.InsertDB(r.Context(), conn)
 	if err != nil {
+		log.Printf("%v", err)
 		http.Error(w, "500 internal server error", http.StatusInternalServerError)
 		return
 	}
@@ -48,6 +51,7 @@ func postCreate(w http.ResponseWriter, r *http.Request) {
 func postsFeed(w http.ResponseWriter, r *http.Request) {
 	conn, err := internal.GetConnection(r.Context())
 	if err != nil {
+		log.Printf("%v", err)
 		http.Error(w, "500 internal server error", http.StatusInternalServerError)
 		return
 	}
@@ -56,6 +60,7 @@ func postsFeed(w http.ResponseWriter, r *http.Request) {
 	db := database.New(conn)
 	db_posts, err := db.ListPosts(r.Context())
 	if err != nil {
+		log.Printf("%v", err)
 		http.Error(w, "500 internal server error", http.StatusInternalServerError)
 		return
 	}
@@ -78,6 +83,7 @@ func postPage(w http.ResponseWriter, r *http.Request) {
 
 	conn, err := internal.GetConnection(r.Context())
 	if err != nil {
+		log.Printf("%v", err)
 		http.Error(w, "500 internal server error", http.StatusInternalServerError)
 		return
 	}
@@ -86,6 +92,7 @@ func postPage(w http.ResponseWriter, r *http.Request) {
 	db := database.New(conn)
 	db_post, err := db.GetPost(r.Context(), pgtype.UUID{Bytes: id, Valid: true})
 	if err != nil {
+		log.Printf("%v", err)
 		http.Error(w, "500 internal server error", http.StatusInternalServerError)
 		return
 	}
@@ -112,8 +119,6 @@ func registerUser(w http.ResponseWriter, r *http.Request) {
 	username := r.FormValue("username")
 	email := r.FormValue("email")
 	password := r.FormValue("password")
-
-	log.Printf("%s %s %s", username, email, password)
 
 	user, err := go_template.NewUser(username, email, password)
 	if err != nil {

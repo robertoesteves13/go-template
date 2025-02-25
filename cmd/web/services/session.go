@@ -1,10 +1,5 @@
 package services
 
-// TODO: Do these in the future
-// - Alternative storage methods
-// - Better redirection system
-// - TOTP/email verification
-
 import (
 	"context"
 	"crypto/rand"
@@ -63,8 +58,8 @@ func (sm *SessionManager[User]) createSession(u User) string {
 
 	sm.lock.Lock()
 	sm.memstore[id] = SessionInfo[User]{
-		user:       u,
-		created_at: time.Now(),
+		user:         u,
+		created_at:   time.Now(),
 		time_to_live: 24 * time.Hour,
 	}
 	sm.lock.Unlock()
@@ -123,8 +118,8 @@ func (sm *SessionManager[User]) Authenticate(h http.Handler) http.Handler {
 			if info.created_at.Add(info.time_to_live).Before(time.Now()) {
 				sm.destroySession(id)
 				http.SetCookie(w, &http.Cookie{
-					Name: "id",
-					Value: "",
+					Name:   "id",
+					Value:  "",
 					MaxAge: -1,
 				})
 			} else {
